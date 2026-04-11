@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClubLens — Pupil participation, at a glance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a18;
+    --ink-mid: #4a4a44;
+    --ink-soft: #8a8a80;
+    --paper: #f5f2eb;
+    --paper-warm: #ede9df;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0ea;
+    --accent-mid: #4a8c60;
+    --rule: rgba(26,26,24,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background: var(--paper);
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-logo span { color: var(--accent-mid); font-style: italic; }
+
+  nav a {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--ink-mid);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+
+  .nav-download {
+    background: var(--accent) !important;
+    color: #fff !important;
+    padding: 0.45rem 1rem;
+    border-radius: 2px;
+  }
+
+  .nav-download:hover { background: var(--accent-mid) !important; color: #fff !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 64px;
+  }
+
+  .hero-left {
+    padding: 5rem 3rem 5rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 0.5px solid var(--rule);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-mid);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent-mid);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--ink-mid);
+    max-width: 42ch;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.85rem 2rem;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+
+  .btn-primary:hover { background: var(--accent-mid); transform: translateY(-1px); }
+
+  .version-badge {
+    margin-top: 1.2rem;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  .version-badge strong { color: var(--ink-mid); font-weight: 500; }
+
+  /* HERO RIGHT — stat panel */
+  .hero-right {
+    padding: 5rem 2.5rem 5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .stat-row {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 0;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .stat-row:first-child { border-top: 0.5px solid var(--rule); }
+
+  .stat-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .stat-note {
+    font-size: 0.82rem;
+    color: var(--ink-mid);
+    margin-top: 0.2rem;
+  }
+
+  /* HOW IT WORKS */
+  section { padding: 5rem 2.5rem; border-top: 0.5px solid var(--rule); }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-mid);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: var(--ink);
+  }
+
+  .section-intro {
+    font-size: 1rem;
+    color: var(--ink-mid);
+    max-width: 58ch;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+
+  /* STEPS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 0.5px solid var(--rule);
+    border-radius: 2px;
+  }
+
+  .step {
+    padding: 2rem;
+    border-right: 0.5px solid var(--rule);
+  }
+
+  .step:last-child { border-right: none; }
+
+  .step-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    color: var(--accent-light);
+    line-height: 1;
+    margin-bottom: 1rem;
+    -webkit-text-stroke: 1px var(--accent-mid);
+  }
+
+  .step h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+
+  .step p {
+    font-size: 0.88rem;
+    color: var(--ink-mid);
+    line-height: 1.65;
+  }
+
+  /* GROUPS SECTION */
+  .groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 0.5px solid var(--rule);
+    margin-top: 2.5rem;
+  }
+
+  .group-card {
+    background: var(--paper);
+    padding: 1.5rem;
+  }
+
+  .group-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .group-icon svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+
+  .group-card h3 {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .group-card p {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  /* PRIVACY STRIP */
+  .privacy-strip {
+    background: var(--paper-warm);
+    border: 0.5px solid var(--rule);
+    border-radius: 2px;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+
+  .privacy-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .privacy-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+
+  .privacy-strip h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .privacy-strip p {
+    font-size: 0.85rem;
+    color: var(--ink-mid);
+    line-height: 1.5;
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    border: 0.5px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.65rem 1.25rem;
+    border-radius: 2px;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-secondary:hover { background: var(--accent); color: #fff; }
+
+  /* VERSION HISTORY */
+  .release {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 0.5px solid var(--rule);
+    align-items: baseline;
+  }
+
+  .release:first-child { border-top: 0.5px solid var(--rule); }
+
+  .release-meta { display: flex; flex-direction: column; gap: 0.25rem; }
+
+  .release-version {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+
+  .release-date {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  .release-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    background: var(--accent-light);
+    color: var(--accent);
+    margin-top: 0.25rem;
+    width: fit-content;
+  }
+
+  .release-notes h4 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+
+  .release-notes ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .release-notes li {
+    font-size: 0.875rem;
+    color: var(--ink-mid);
+    line-height: 1.6;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .release-notes li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--ink-soft);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 0.5px solid var(--rule);
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer p {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  footer a {
+    font-size: 0.8rem;
+    color: var(--ink-mid);
+    text-decoration: none;
+  }
+
+  footer a:hover { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { border-right: none; border-bottom: 0.5px solid var(--rule); padding: 3rem 1.5rem; }
+    .hero-right { padding: 2rem 1.5rem; }
+    .steps { grid-template-columns: 1fr; }
+    .step { border-right: none; border-bottom: 0.5px solid var(--rule); }
+    .step:last-child { border-bottom: none; }
+    .privacy-strip { grid-template-columns: 1fr; }
+    .release { grid-template-columns: 1fr; gap: 0.5rem; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1rem; }
+    section { padding: 3rem 1.5rem; }
+    footer { padding: 1.5rem; }
+  }
+
+  /* FADE IN */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-left > * {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-left > *:nth-child(1) { animation-delay: 0.05s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.15s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.25s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.35s; }
+  .hero-left > *:nth-child(5) { animation-delay: 0.45s; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Club<span>Lens</span></a>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#versions">Versions</a>
+    <a href="privacy.html">Data protection</a>
+    <a href="#download" class="nav-download">Download</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Free · Browser-based · No installation</p>
+    <h1>Pupil participation,<br><em>at a glance</em></h1>
+    <p class="hero-sub">ClubLens helps you see which pupils are engaging in school clubs — and crucially, which ones aren't. Export your Bromcom data, drag it in, and immediately see participation broken down by Pupil Premium, SEN, EAL, and more.</p>
+    <a href="#download" class="btn-primary" id="download">Download ClubLens</a>
+    <p class="version-badge">Current release: <strong>v1.0.0</strong> &mdash; [Release date]</p>
+  </div>
+  <div class="hero-right">
+    <div class="stat-row">
+      <span class="stat-label">Processing</span>
+      <span class="stat-value">Entirely on your device</span>
+      <span class="stat-note">No data leaves the browser. Ever.</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Installation required</span>
+      <span class="stat-value">None</span>
+      <span class="stat-note">Open the file in any browser and go</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Login or subscription</span>
+      <span class="stat-value">None</span>
+      <span class="stat-note">Free to download and use</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Time to insight</span>
+      <span class="stat-value">Under a minute</span>
+      <span class="stat-note">vs. an afternoon with spreadsheets</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Data source</span>
+      <span class="stat-value">Bromcom export</span>
+      <span class="stat-note">One file. Drag, drop, done.</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <p class="section-label">How it works</p>
+  <h2>Three steps to a full picture</h2>
+  <p class="section-intro">No setup, no configuration, no accounts. ClubLens is a single HTML file that runs entirely inside your web browser.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Export from Bromcom</h3>
+      <p>Run your standard clubs data export from your school's MIS. ClubLens reads the file exactly as Bromcom produces it — no reformatting needed.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Drag and drop</h3>
+      <p>Open ClubLens in any browser and drag your export file onto the page. Processing happens instantly, entirely within your browser.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>See your picture</h3>
+      <p>Every tab, chart, and figure generates immediately. Participation broken down by the groups that matter — ready for your next governors' report or pupil premium strategy.</p>
+    </div>
+  </div>
+
+  <!-- GROUPS -->
+  <p class="section-label" style="margin-top: 3rem;">Pupil groups analysed</p>
+  <div class="groups-grid">
+    <div class="group-card">
+      <div class="group-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2zm0 13c-5.33 0-8 2.67-8 4v1h16v-1c0-1.33-2.67-4-8-4z"/></svg>
+      </div>
+      <h3>Pupil Premium</h3>
+      <p>Ever FSM 6 flag — identifying PP pupils across your clubs offer</p>
+    </div>
+    <div class="group-card">
+      <div class="group-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <h3>SEN</h3>
+      <p>EHCP and SEN Support pupils, shown separately and combined</p>
+    </div>
+    <div class="group-card">
+      <div class="group-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h18M3 19h18"/></svg>
+      </div>
+      <h3>EAL</h3>
+      <p>English as an Additional Language — participation compared to peers</p>
+    </div>
+    <div class="group-card">
+      <div class="group-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>Service Children</h3>
+      <p>Children of armed forces families tracked across the enrichment offer</p>
+    </div>
+    <div class="group-card">
+      <div class="group-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <h3>Looked After Children</h3>
+      <p>LAC participation visible at a glance, no manual cross-referencing</p>
+    </div>
+    <div class="group-card">
+      <div class="group-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <h3>Year group</h3>
+      <p>Spot under-represented year groups across the whole enrichment programme</p>
+    </div>
+  </div>
+
+  <!-- PRIVACY STRIP -->
+  <div class="privacy-strip">
+    <div class="privacy-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div>
+      <h3>Pupil data never leaves your school</h3>
+      <p>ClubLens processes everything locally in your browser. No server, no cloud, no third party ever sees your data. When you close the tab, it's gone. Full data protection information is available for DPOs.</p>
+    </div>
+    <a href="privacy.html" class="btn-secondary">DP information &rarr;</a>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section id="download">
+  <p class="section-label">Download</p>
+  <h2>Get ClubLens</h2>
+  <p class="section-intro">ClubLens is a single HTML file. Download it, save it anywhere on your computer, and open it in Chrome, Edge, Firefox, or Safari. No installation, no admin rights required.</p>
+
+  <a href="[REPLACE WITH GITHUB RELEASE DOWNLOAD URL]" class="btn-primary">Download clublens-v1.0.0.html</a>
+  <p style="margin-top: 1rem; font-size: 0.82rem; color: var(--ink-soft);">SHA-256 checksum: [add after build if required] &nbsp;·&nbsp; Compatible with Chrome, Edge, Firefox, Safari</p>
+</section>
+
+<!-- VERSION HISTORY -->
+<section id="versions">
+  <p class="section-label">Version history</p>
+  <h2>Release notes</h2>
+
+  <div class="release">
+    <div class="release-meta">
+      <span class="release-version">v1.0.0</span>
+      <span class="release-date">[Release date]</span>
+      <span class="release-tag">Latest</span>
+    </div>
+    <div class="release-notes">
+      <h4>Initial release</h4>
+      <ul>
+        <li>Participation overview across all clubs and all pupil groups</li>
+        <li>Breakdown by Pupil Premium, SEN, EAL, Service Children, and Looked After Children</li>
+        <li>Year group analysis</li>
+        <li>Breakfast Club and After School Club tracking</li>
+        <li>Action Plan tab with notes saved between sessions</li>
+        <li>Runs entirely in the browser — no data transmission of any kind</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 ClubLens. Free to use in any school.</p>
+  <div style="display: flex; gap: 1.5rem;">
+    <a href="privacy.html">Data protection information</a>
+    <a href="mailto:paulottewell@gmail.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>

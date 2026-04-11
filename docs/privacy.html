@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClubLens — Data Protection Information</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a18;
+    --ink-mid: #4a4a44;
+    --ink-soft: #8a8a80;
+    --paper: #f5f2eb;
+    --paper-warm: #ede9df;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0ea;
+    --accent-mid: #4a8c60;
+    --rule: rgba(26,26,24,0.12);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2.5rem;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent-mid); font-style: italic; }
+
+  nav a.back {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--ink-mid);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  nav a.back:hover { color: var(--accent); }
+
+  /* LAYOUT */
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4rem 2.5rem 6rem;
+  }
+
+  /* HEADER */
+  .page-header {
+    border-bottom: 0.5px solid var(--rule);
+    padding-bottom: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .page-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-mid);
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+
+  .page-sub {
+    font-size: 1rem;
+    color: var(--ink-mid);
+    max-width: 60ch;
+    line-height: 1.7;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+  .meta-value { font-size: 0.88rem; color: var(--ink-mid); }
+
+  /* SUMMARY CARDS */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 0.5px solid var(--rule);
+    margin-bottom: 4rem;
+  }
+
+  .summary-card {
+    background: var(--paper);
+    padding: 1.5rem;
+  }
+
+  .summary-card .label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.4rem;
+  }
+
+  .summary-card .value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-top: 0.3rem;
+  }
+
+  .tag-green { background: var(--accent-light); color: var(--accent); }
+  .tag-amber { background: #fef3e2; color: #7a4e10; }
+  .tag-red   { background: #fdecea; color: #8b2020; }
+
+  /* SECTIONS */
+  .dp-section {
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .dp-section:last-of-type { border-bottom: none; }
+
+  .section-num {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-mid);
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: var(--ink-mid);
+    margin-bottom: 1rem;
+    line-height: 1.75;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  /* DATA TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+  }
+
+  .data-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 0.6rem 1rem 0.6rem 0;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .data-table td {
+    padding: 0.75rem 1rem 0.75rem 0;
+    border-bottom: 0.5px solid var(--rule);
+    color: var(--ink-mid);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .data-table td:first-child { color: var(--ink); font-weight: 400; }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* CONFIRMATION LIST */
+  .confirm-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  .confirm-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 0.5px solid var(--rule);
+    font-size: 0.9rem;
+    color: var(--ink-mid);
+    line-height: 1.5;
+  }
+
+  .confirm-list li:last-child { border-bottom: none; }
+
+  .confirm-list .check {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .confirm-list .check svg { width: 10px; height: 10px; stroke: var(--accent); fill: none; stroke-width: 2.5; }
+
+  .confirm-list .cross {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background: #fdecea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .confirm-list .cross svg { width: 10px; height: 10px; stroke: #8b2020; fill: none; stroke-width: 2.5; }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--paper-warm);
+    border: 0.5px solid var(--rule);
+    border-left: 2px solid var(--accent);
+    border-radius: 2px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+    color: var(--ink-mid);
+    line-height: 1.65;
+  }
+
+  .callout strong { color: var(--ink); font-weight: 500; }
+
+  /* CONTACT CARD */
+  .contact-card {
+    background: var(--paper-warm);
+    border: 0.5px solid var(--rule);
+    border-radius: 2px;
+    padding: 1.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .contact-card h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-row {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+  }
+
+  .contact-row .clabel {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    min-width: 60px;
+  }
+
+  .contact-row a { color: var(--accent); text-decoration: none; }
+  .contact-row a:hover { text-decoration: underline; }
+
+  /* FOOTER */
+  footer {
+    border-top: 0.5px solid var(--rule);
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer p { font-size: 0.8rem; color: var(--ink-soft); }
+  footer a { font-size: 0.8rem; color: var(--ink-mid); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .page { padding: 2rem 1.25rem 4rem; }
+    nav { padding: 1rem 1.25rem; }
+    footer { padding: 1.25rem; }
+    .meta-row { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Club<span>Lens</span></a>
+  <a class="back" href="index.html">&larr; Back to ClubLens</a>
+</nav>
+
+<div class="page">
+
+  <div class="page-header">
+    <p class="page-eyebrow">Data protection information</p>
+    <h1>For data protection officers and school leaders</h1>
+    <p class="page-sub">This page sets out how ClubLens handles pupil data. It is intended to assist DPOs, headteachers, and IT leads carrying out due diligence before deploying ClubLens in a school setting.</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-label">Document version</span>
+        <span class="meta-value">1.0</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Last reviewed</span>
+        <span class="meta-value">[Date]</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Applies to ClubLens</span>
+        <span class="meta-value">v1.0.0 and above</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Data transmission</div>
+      <div class="value">None</div>
+      <span class="tag tag-green">No data leaves the device</span>
+    </div>
+    <div class="summary-card">
+      <div class="label">Server or cloud storage</div>
+      <div class="value">None</div>
+      <span class="tag tag-green">Fully local processing</span>
+    </div>
+    <div class="summary-card">
+      <div class="label">Third-party services</div>
+      <div class="value">None</div>
+      <span class="tag tag-green">No analytics, no APIs</span>
+    </div>
+    <div class="summary-card">
+      <div class="label">Data retention</div>
+      <div class="value">Session only</div>
+      <span class="tag tag-amber">Notes persist in localStorage</span>
+    </div>
+    <div class="summary-card">
+      <div class="label">Controller / processor</div>
+      <div class="value">School is controller</div>
+      <span class="tag tag-green">No Article 28 DPA required</span>
+    </div>
+    <div class="summary-card">
+      <div class="label">UK GDPR lawful basis</div>
+      <div class="value">6(1)(e)</div>
+      <span class="tag tag-green">Public task</span>
+    </div>
+  </div>
+
+  <!-- 1. WHAT CLUBLENS IS -->
+  <div class="dp-section">
+    <p class="section-num">Section 1</p>
+    <h2>What ClubLens is</h2>
+    <p>ClubLens is a single HTML file that runs entirely within a web browser on the user's own device. It has no backend, no server, and no network connectivity of any kind. It is distributed as a standalone file that can be saved locally and opened without an internet connection.</p>
+    <p>ClubLens is a tool, not a service. The school downloads the file and operates it entirely within its own environment. The developer of ClubLens has no access to any data processed using the tool at any time.</p>
+  </div>
+
+  <!-- 2. CONTROLLER AND PROCESSOR -->
+  <div class="dp-section">
+    <p class="section-num">Section 2</p>
+    <h2>Controller and processor status</h2>
+    <p>Because ClubLens processes data entirely within the school's own device and environment — with no data transmitted to any external party — there is no processor relationship to establish.</p>
+
+    <div class="callout">
+      <strong>The school (or trust) is the sole data controller.</strong> The developer of ClubLens does not receive, process, store, or have any access to pupil data at any point. An Article 28 Data Processing Agreement is therefore not required.
+    </div>
+
+    <p>Schools and trusts should satisfy themselves that their existing lawful basis for processing pupil data via their MIS covers the use of local analytical tools of this nature. Guidance on this is set out in Section 4 below.</p>
+  </div>
+
+  <!-- 3. DATA PROCESSED -->
+  <div class="dp-section">
+    <p class="section-num">Section 3</p>
+    <h2>Data read by ClubLens</h2>
+    <p>ClubLens reads a single export file produced by Bromcom (the school's MIS). No other data is required or accepted. The following fields are used from that file:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Data field</th>
+          <th>Purpose within ClubLens</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Preferred first name and last name</td>
+          <td>Identifying individual pupils in the interface</td>
+          <td>Personal data</td>
+        </tr>
+        <tr>
+          <td>Year group</td>
+          <td>Year group participation analysis</td>
+          <td>Personal data</td>
+        </tr>
+        <tr>
+          <td>Club memberships (per term)</td>
+          <td>Core participation analysis</td>
+          <td>Personal data</td>
+        </tr>
+        <tr>
+          <td>Pupil Premium status (Ever FSM 6 flag)</td>
+          <td>Pupil Premium participation breakdown</td>
+          <td>Special category — economic circumstance indicator</td>
+        </tr>
+        <tr>
+          <td>SEN status (EHCP / SEN Support)</td>
+          <td>SEN participation breakdown</td>
+          <td>Special category — health / disability</td>
+        </tr>
+        <tr>
+          <td>EAL flag</td>
+          <td>EAL participation breakdown</td>
+          <td>Personal data</td>
+        </tr>
+        <tr>
+          <td>Service Children status</td>
+          <td>Service Children participation breakdown</td>
+          <td>Personal data</td>
+        </tr>
+        <tr>
+          <td>Looked After Children status</td>
+          <td>LAC participation breakdown</td>
+          <td>Special category — legal / social care status</td>
+        </tr>
+        <tr>
+          <td>Breakfast Club registration</td>
+          <td>Extended provision tracking</td>
+          <td>Personal data</td>
+        </tr>
+        <tr>
+          <td>After School Club registration</td>
+          <td>Extended provision tracking</td>
+          <td>Personal data</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>ClubLens reads only the fields listed above from the Bromcom export. All other fields in the export file are ignored.</p>
+  </div>
+
+  <!-- 4. WHAT CLUBLENS DOES NOT DO -->
+  <div class="dp-section">
+    <p class="section-num">Section 4</p>
+    <h2>What ClubLens does not do</h2>
+
+    <ul class="confirm-list">
+      <li>
+        <div class="cross"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></div>
+        Does not transmit any data — pupil data never leaves the user's browser
+      </li>
+      <li>
+        <div class="cross"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></div>
+        Does not store pupil data permanently — all data is cleared when the tab is closed or the page is refreshed
+      </li>
+      <li>
+        <div class="cross"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></div>
+        Does not use cookies of any kind
+      </li>
+      <li>
+        <div class="cross"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></div>
+        Does not use analytics, tracking, or telemetry services
+      </li>
+      <li>
+        <div class="cross"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></div>
+        Does not connect to any external API or third-party service
+      </li>
+      <li>
+        <div class="cross"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></div>
+        Does not require an internet connection to function
+      </li>
+      <li>
+        <div class="cross"><svg viewBox="0 0 12 12"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></div>
+        Does not create user accounts or profiles
+      </li>
+    </ul>
+
+    <div class="callout">
+      <strong>The only exception to the above:</strong> ClubLens saves any notes entered in the Action Plan tab to the browser's <code>localStorage</code>. This data remains on the local device only, is not transmitted anywhere, and can be cleared by the user at any time by clearing their browser's local storage. Notes stored in this way do not contain pupil data unless the user manually enters it — ClubLens does not write pupil data to localStorage automatically.
+    </div>
+  </div>
+
+  <!-- 5. LAWFUL BASIS -->
+  <div class="dp-section">
+    <p class="section-num">Section 5</p>
+    <h2>Lawful basis for processing</h2>
+    <p>Schools and trusts using ClubLens to analyse pupil participation data should identify an appropriate lawful basis under UK GDPR Article 6. The following basis is likely to apply in most school settings:</p>
+
+    <div class="callout">
+      <strong>Article 6(1)(e) — Public task.</strong> Schools have a statutory duty under the Education Act 1996 and subsequent legislation to promote the wellbeing and equal access to opportunities of all pupils, including those with protected characteristics and those receiving Pupil Premium funding. Analysing participation in enrichment activities to identify and address inequity falls clearly within this public task.
+    </div>
+
+    <p>For the processing of special category data (SEN status, LAC status, Pupil Premium as an economic circumstance indicator), schools should additionally identify a condition under Article 9. The following conditions are likely to apply:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Special category data</th>
+          <th>Suggested Article 9 condition</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SEN status (EHCP / SEN Support)</td>
+          <td>9(2)(b) — processing necessary for obligations in the field of employment, social security, and social protection</td>
+        </tr>
+        <tr>
+          <td>Looked After Children status</td>
+          <td>9(2)(b) or 9(2)(f) — legal claims / vital interests in a social care context</td>
+        </tr>
+        <tr>
+          <td>Pupil Premium (Ever FSM 6)</td>
+          <td>This is an administrative flag rather than a protected characteristic; schools should confirm their existing basis for processing this data within their MIS covers analytical use</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Schools should document their lawful basis in their Record of Processing Activities (ROPA) where required. DPOs with questions about the appropriate basis for their specific context are welcome to contact the ClubLens developer using the details in Section 7.</p>
+  </div>
+
+  <!-- 6. DATA SUBJECT RIGHTS -->
+  <div class="dp-section">
+    <p class="section-num">Section 6</p>
+    <h2>Data subject rights</h2>
+    <p>Because ClubLens retains no pupil data once the browser session ends — and transmits no data externally at any point — data subject rights requests (access, erasure, rectification) relating to ClubLens should be directed to the school's MIS system (Bromcom) rather than to ClubLens itself.</p>
+    <p>The school, as data controller, is responsible for managing data subject rights in relation to all pupil data it holds and processes, including processing carried out using local tools such as ClubLens.</p>
+  </div>
+
+  <!-- 7. CONTACT -->
+  <div class="dp-section">
+    <p class="section-num">Section 7</p>
+    <h2>Contact for data protection queries</h2>
+    <p>DPOs and school leaders with questions about this information, or who require additional detail to complete a DPIA, are welcome to get in touch directly.</p>
+
+    <div class="contact-card">
+      <h3>ClubLens developer contact</h3>
+      <div class="contact-row">
+        <span class="clabel">Name</span>
+        <span>Paul Ottewell</span>
+      </div>
+      <div class="contact-row">
+        <span class="clabel">Role</span>
+        <span>Developer and distributor of ClubLens</span>
+      </div>
+      <div class="contact-row">
+        <span class="clabel">Email</span>
+        <a href="mailto:paulottewell@gmail.com">paulottewell@gmail.com</a>
+      </div>
+      <div class="contact-row">
+        <span class="clabel">Response</span>
+        <span>Within 5 working days</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. DPIA -->
+  <div class="dp-section">
+    <p class="section-num">Section 8</p>
+    <h2>Do schools need to complete a DPIA?</h2>
+    <p>A Data Protection Impact Assessment (DPIA) is required under UK GDPR where processing is likely to result in a high risk to individuals. Given that ClubLens:</p>
+
+    <ul class="confirm-list">
+      <li>
+        <div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        Processes data entirely on the school's own device, with no external transmission
+      </li>
+      <li>
+        <div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        Does not create new data — it only analyses existing MIS data the school already holds
+      </li>
+      <li>
+        <div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        Retains no data beyond the active browser session
+      </li>
+      <li>
+        <div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+        Involves no automated decision-making or profiling with legal or significant effect
+      </li>
+    </ul>
+
+    <p>…it is unlikely that a formal DPIA will be required in most cases. However, schools processing data for pupils who are subject to safeguarding plans, or in contexts where the trust's DPO advises additional caution, should apply their standard DPIA threshold assessment in the usual way.</p>
+
+    <div class="callout">
+      Schools that do wish to complete a DPIA for ClubLens are welcome to request a completed draft DPIA document from the developer. Contact details are in Section 7.
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<footer>
+  <p>&copy; 2025 ClubLens. Data protection information v1.0.</p>
+  <div style="display: flex; gap: 1.5rem;">
+    <a href="index.html">Back to ClubLens</a>
+    <a href="mailto:paulottewell@gmail.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
