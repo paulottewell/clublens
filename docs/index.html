@@ -478,12 +478,24 @@
   .hero-left > *:nth-child(3) { animation-delay: 0.25s; }
   .hero-left > *:nth-child(4) { animation-delay: 0.35s; }
   .hero-left > *:nth-child(5) { animation-delay: 0.45s; }
+
+  .nav-logo-img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+
+  .hero-logo {
+    width: 240px;
+    height: auto;
+    margin-bottom: 2rem;
+  }
 </style>
 </head>
 <body>
 
 <nav>
-  <a class="nav-logo" href="index.html">Club<span>Lens</span></a>
+  <a class="nav-logo" href="index.html"><img src="ClubLens-logo.png" alt="ClubLens" class="nav-logo-img"></a>
   <div class="nav-links">
     <a href="#how-it-works">How it works</a>
     <a href="#versions">Versions</a>
@@ -495,6 +507,7 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-left">
+    <img src="ClubLens-logo.png" alt="ClubLens" class="hero-logo">
     <p class="hero-eyebrow">Free · Browser-based · No installation</p>
     <h1>Pupil participation,<br><em>at a glance</em></h1>
     <p class="hero-sub">ClubLens helps you see which pupils are engaging in school clubs — and crucially, which ones aren't. Export your Bromcom data, drag it in, and immediately see participation broken down by Pupil Premium, SEN, EAL, and more.</p>
