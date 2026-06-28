@@ -7,9 +7,12 @@ It reads a Bromcom `.xlsx` clubs export and generates participation analysis acr
 priority groups. All processing runs locally in the browser — no data ever leaves
 the device.
 
-**Current version:** v16
-**Key file:** `ClubLens_v13.html` — self-contained, no companion files required.
+**Current version:** v17
+**Key file:** `docs/ClubLens_v17.html` — self-contained, no companion files required.
 SheetJS is inlined; no separate `xlsx.full.min.js` is needed.
+
+**Hosted at:** clublens.vercel.app (served from `docs/` in the GitHub repo)
+**Repo:** github.com/paulottewell/clublens
 
 **Pilot tester:** Suzie (headteacher, St Matthew's C of E Primary Academy)
 **Author / IP owner:** Paul Ottewell
@@ -286,7 +289,7 @@ These bugs have all been hit. Do not reintroduce them.
 After any edit to a JS block, verify with:
 ```bash
 python3 -c "
-with open('ClubLens_v13.html') as f:
+with open('docs/ClubLens_v17.html') as f:
     c = f.read()
 first_close = c.index('</script>')
 second_start = c.index('<script>', first_close)
@@ -300,16 +303,41 @@ Then recompute CSP hashes (see CSP section).
 
 ---
 
+## Deployment
+
+ClubLens is hosted at **clublens.vercel.app**, served from the `docs/` subfolder.
+GitHub repo: **github.com/paulottewell/clublens**
+Vercel Root Directory setting: `docs` (configured in Vercel dashboard → Settings → Build and Deployment).
+
+**Standard release process:**
+1. Edit `docs/ClubLens_vXX.html`
+2. Copy to `docs/ClubLens_v(XX+1).html` for the new version
+3. Update `docs/index.html`: both download `href` values, version badge, date, SHA-256 checksum, and add a release notes block
+4. Compute SHA-256: `python3 -c "import hashlib; print(hashlib.sha256(open('docs/ClubLens_vXX.html','rb').read()).hexdigest())"`
+5. Commit and push:
+```bash
+git add docs/ClubLens_vXX.html docs/index.html
+git commit -m "vXX: description"
+git push
+```
+Vercel deploys automatically within ~1 minute.
+
+---
+
 ## Files in this project
 
 | File | Description |
 |------|-------------|
-| `ClubLens_v13.html` | The application — single file, self-contained |
+| `docs/ClubLens_v17.html` | The application — current version, self-contained |
+| `docs/index.html` | Landing/download page served by Vercel |
+| `docs/privacy.html` | Data protection information page |
+| `docs/ClubLens-logo.png` | Logo asset |
 | `ClubLens_DPO_Report_v12.pdf` | Data protection risk assessment for DPO (covers up to v12) |
 | `CLAUDE.md` | This file |
 
-The following files from earlier versions are **obsolete** and should be discarded:
-`ClubLens_v10.html`, `ClubLens_v11.html`, `ClubLens_v12.html`, `xlsx.full.min.js`,
+The following files are **obsolete** and should be discarded:
+`ClubLens_v10.html`, `ClubLens_v11.html`, `ClubLens_v12.html`, `ClubLens_v13.html`,
+`ClubLens_v16.html` (root copy — belongs in `docs/` only), `xlsx.full.min.js`,
 `README_SETUP.txt`, `ClubLens_DPO_Report.pdf` (v10 report), `ClubLens_DPO_Report_v11.pdf`.
 
 ---
