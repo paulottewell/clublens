@@ -7,8 +7,8 @@ It reads a Bromcom `.xlsx` clubs export and generates participation analysis acr
 priority groups. All processing runs locally in the browser — no data ever leaves
 the device.
 
-**Current version:** v17
-**Key file:** `docs/ClubLens_v17.html` — self-contained, no companion files required.
+**Current version:** v18
+**Key file:** `docs/ClubLens_v18.html` — self-contained, no companion files required.
 SheetJS is inlined; no separate `xlsx.full.min.js` is needed.
 
 **Hosted at:** clublens.vercel.app (served from `docs/` in the GitHub repo)
@@ -289,7 +289,7 @@ These bugs have all been hit. Do not reintroduce them.
 After any edit to a JS block, verify with:
 ```bash
 python3 -c "
-with open('docs/ClubLens_v17.html') as f:
+with open('docs/ClubLens_v18.html') as f:
     c = f.read()
 first_close = c.index('</script>')
 second_start = c.index('<script>', first_close)
@@ -328,7 +328,7 @@ Vercel deploys automatically within ~1 minute.
 
 | File | Description |
 |------|-------------|
-| `docs/ClubLens_v17.html` | The application — current version, self-contained |
+| `docs/ClubLens_v18.html` | The application — current version, self-contained |
 | `docs/index.html` | Landing/download page served by Vercel |
 | `docs/privacy.html` | Data protection information page |
 | `docs/ClubLens-logo.png` | Logo asset |
