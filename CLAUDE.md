@@ -7,8 +7,8 @@ It reads a Bromcom `.xlsx` clubs export and generates participation analysis acr
 priority groups. All processing runs locally in the browser — no data ever leaves
 the device.
 
-**Current version:** v19
-**Key file:** `docs/ClubLens_v19.html` — self-contained, no companion files required.
+**Current version:** v20
+**Key file:** `docs/ClubLens_v20.html` — self-contained, no companion files required.
 SheetJS is inlined; no separate `xlsx.full.min.js` is needed.
 
 **Hosted at:** clublens.vercel.app (served from `docs/` in the GitHub repo)
@@ -28,9 +28,8 @@ SheetJS is inlined; no separate `xlsx.full.min.js` is needed.
 - CSP: hash-based (no nonce), see Security section below
 - No `unsafe-inline` in `script-src`
 - All handlers wired via `addEventListener`; no inline event handlers
-- `localStorage` used only for Action Plan text (no pupil data) and the chosen school.
-  Keys: `clublens_actionplan_v1` (St Matthew's), `clublens_actionplan_v1_<school>` (other
-  schools), `clublens_school_v1` (School picker choice)
+- `localStorage` used only for Action Plan text (no pupil data), key: `clublens_actionplan_v1`
+  (v20 removes the old v19 `clublens_school_v1` key on load)
 
 ---
 
@@ -106,7 +105,8 @@ Then replace the `script-src` line in the CSP `<meta>` tag with the new hashes.
 | Spring clubs | `Club-*` columns (active, no NOT ACTIVE marker) |
 | Autumn clubs | `Club-*` columns containing `NOT ACTIVE` |
 | Summer clubs | `Club-*` columns (active) — **currently requires naming convention** |
-| Special items | Set by the school profile (v19) — see below |
+| Special items | Breakfast Club, After School Club (or `ASC`), BF Residential, Schools Challenge |
+| Trips (v20) | `[TRI]` tag anywhere in the column, or Trip/Visit/Outing/Excursion in the name |
 | Always ignored | `Outstanding Lunch Balances` |
 
 ---
@@ -120,7 +120,7 @@ Summer tab is hidden unless summer clubs are detected.
 **Per-term sections:**
 Overview | Pupils | Clubs | Trips | Breakfast Club | After School Club | Equity | Priority Groups | Special Items
 
-(Order must match `SEC_NAMES`. Special Items is hidden when the school profile has no one-off items.)
+(Order must match `SEC_NAMES`. Special Items is hidden when the file has no Residential/Schools Challenge pupils.)
 
 A half-term filter bar (`#hb-<term>`) sits above the section tabs when the term has half-term clubs.
 
@@ -211,15 +211,13 @@ function colCategory(col) {
 
 ---
 
-## v19 features
+## v19–v20 features
 
-### School profiles (`SCHOOL_PROFILES`)
-A School picker on the landing page (`#school-sel`) and header (`#school-sel-hdr`)
-chooses a profile: `stmatthews`, `exeter`, `generic`. Each profile sets
-`specials` (special item defs — St Matthew's keeps Residential + Schools Challenge;
-others recognise `ASC` as After School Club) and `tripRx`. `SPECIAL_ITEM_DEFS` is now
-`let` and is set from the profile. Changing school re-parses `LAST_ROWS` (in-memory
-only; cleared by `expireSession`). Add a new school by adding a profile entry.
+### No school-specific settings (v20)
+The v19 School picker and `SCHOOL_PROFILES` were removed. One rule set reads every
+export and no school name is shown anywhere in the UI or the printed Action Plan.
+`SPECIAL_ITEM_DEFS` is a const again; After School Club matches
+`/After School Club|\bASC\b/i` (covers `Club-ASC-Member`).
 
 ### Term and half-term detection (`colInfo(col)` → `[{term, half}]`)
 First rule that matches wins:
@@ -241,8 +239,9 @@ appear in both halves. `effectiveClubs` / `effectiveTrips` /
 pupil-map keys.
 
 ### Trips
-Clubs whose name matches the profile's `tripRx` (Trip/Visit/Outing/Excursion)
-are trips: excluded from all club figures and shown in the Trips tab
+A column tagged `[TRI]` (any case, anywhere — `TRIP_TAG_RX`; stripped from the
+display name by `cleanName`) or whose name matches `TRIP_WORD_RX`
+(Trip/Visit/Outing/Excursion) is a trip: excluded from all club figures and shown in the Trips tab
 (`renderTrips`). `tripOverrides[name]` (true/false) records the user's
 🚌 Trip / 🏅 Club reclassification.
 
@@ -332,7 +331,7 @@ These bugs have all been hit. Do not reintroduce them.
 After any edit to a JS block, verify with:
 ```bash
 python3 -c "
-with open('docs/ClubLens_v19.html') as f:
+with open('docs/ClubLens_v20.html') as f:
     c = f.read()
 first_close = c.index('</script>')
 second_start = c.index('<script>', first_close)
@@ -371,7 +370,7 @@ Vercel deploys automatically within ~1 minute.
 
 | File | Description |
 |------|-------------|
-| `docs/ClubLens_v19.html` | The application — current version, self-contained |
+| `docs/ClubLens_v20.html` | The application — current version, self-contained |
 | `docs/index.html` | Landing/download page served by Vercel |
 | `docs/privacy.html` | Data protection information page |
 | `docs/ClubLens-logo.png` | Logo asset |
