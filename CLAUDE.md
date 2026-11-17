@@ -7,8 +7,8 @@ It reads a Bromcom `.xlsx` clubs export and generates participation analysis acr
 priority groups. All processing runs locally in the browser — no data ever leaves
 the device.
 
-**Current version:** v18
-**Key file:** `docs/ClubLens_v18.html` — self-contained, no companion files required.
+**Current version:** v19
+**Key file:** `docs/ClubLens_v19.html` — self-contained, no companion files required.
 SheetJS is inlined; no separate `xlsx.full.min.js` is needed.
 
 **Hosted at:** clublens.vercel.app (served from `docs/` in the GitHub repo)
@@ -28,7 +28,9 @@ SheetJS is inlined; no separate `xlsx.full.min.js` is needed.
 - CSP: hash-based (no nonce), see Security section below
 - No `unsafe-inline` in `script-src`
 - All handlers wired via `addEventListener`; no inline event handlers
-- `localStorage` used only for Action Plan text (no pupil data), key: `clublens_actionplan_v1`
+- `localStorage` used only for Action Plan text (no pupil data) and the chosen school.
+  Keys: `clublens_actionplan_v1` (St Matthew's), `clublens_actionplan_v1_<school>` (other
+  schools), `clublens_school_v1` (School picker choice)
 
 ---
 
@@ -100,10 +102,11 @@ Then replace the `script-src` line in the CSP `<meta>` tag with the new hashes.
 | EAL | `EAL Flag` = Yes |
 | Service children | `Service Children In Education Code` (non-empty, non-N) |
 | Looked after | `PP Looked After` = Yes |
+| Adopted from care (v19) | `Adopted From Care Type` = A, C or O (blank/N ignored) |
 | Spring clubs | `Club-*` columns (active, no NOT ACTIVE marker) |
 | Autumn clubs | `Club-*` columns containing `NOT ACTIVE` |
 | Summer clubs | `Club-*` columns (active) — **currently requires naming convention** |
-| Special items | Breakfast Club, After School Club, BF Residential, Schools Challenge |
+| Special items | Set by the school profile (v19) — see below |
 | Always ignored | `Outstanding Lunch Balances` |
 
 ---
@@ -115,10 +118,14 @@ Then replace the `script-src` line in the CSP `<meta>` tag with the new hashes.
 Summer tab is hidden unless summer clubs are detected.
 
 **Per-term sections:**
-Overview | Pupils | Clubs | Breakfast Club | After School Club | Equity | Priority Groups | Special Items
+Overview | Pupils | Clubs | Trips | Breakfast Club | After School Club | Equity | Priority Groups | Special Items
+
+(Order must match `SEC_NAMES`. Special Items is hidden when the school profile has no one-off items.)
+
+A half-term filter bar (`#hb-<term>`) sits above the section tabs when the term has half-term clubs.
 
 **Priority Groups sub-tabs:**
-Pupil Premium | SEN | Service Children | EAL | Looked After
+Pupil Premium | SEN | Service Children | EAL | Looked After | Adopted from Care (order must match `PG_NAMES`)
 
 ---
 
@@ -204,6 +211,41 @@ function colCategory(col) {
 
 ---
 
+## v19 features
+
+### School profiles (`SCHOOL_PROFILES`)
+A School picker on the landing page (`#school-sel`) and header (`#school-sel-hdr`)
+chooses a profile: `stmatthews`, `exeter`, `generic`. Each profile sets
+`specials` (special item defs — St Matthew's keeps Residential + Schools Challenge;
+others recognise `ASC` as After School Club) and `tripRx`. `SPECIAL_ITEM_DEFS` is now
+`let` and is set from the profile. Changing school re-parses `LAST_ROWS` (in-memory
+only; cleared by `expireSession`). Add a new school by adding a profile entry.
+
+### Term and half-term detection (`colInfo(col)` → `[{term, half}]`)
+First rule that matches wins:
+1. Bracket tags `[Aut]`/`[Spr]`/`[Sum]`, optionally with a half: `[Aut1]`, `[Spr 2]`
+   (several tags → `tagged`, shown in each term). A single half tag stays in the
+   display name as `(Aut1)` so `Chess [Aut1]` and `Chess [Aut2]` remain separate.
+2. Half-term text: `AUT2`, `Aut 2`, `Autumn 1`, `Spr1`, `Summer 2`
+3. Whole-term word: `Autumn`, `Spring`, `Summer`
+4. Month: Sep/Oct → Aut1, Nov/Dec/Christmas → Aut2, Jan/Feb → Spr1, Mar → Spr2,
+   Apr/May → Sum1, Jun/Jul → Sum2
+5. None → `multi` (shown in Autumn and Spring, as v18)
+
+`DATA.clubHalf['term::name']` holds each club's half (null = whole term).
+`termItems(term, half)` is the single source for a term's clubs + trips with
+overrides and the half filter applied (`half` defaults to `halfFilter[term]`;
+pass `'all'` to ignore it — the Action Plan always does). Whole-term items
+appear in both halves. `effectiveClubs` / `effectiveTrips` /
+`effectivePupilClubs` / `effectivePupilTrips` wrap it. Use `pkey(p)` for
+pupil-map keys.
+
+### Trips
+Clubs whose name matches the profile's `tripRx` (Trip/Visit/Outing/Excursion)
+are trips: excluded from all club figures and shown in the Trips tab
+(`renderTrips`). `tripOverrides[name]` (true/false) records the user's
+🚌 Trip / 🏅 Club reclassification.
+
 ## Key functions
 
 | Function | Purpose |
@@ -281,6 +323,7 @@ These bugs have all been hit. Do not reintroduce them.
 | `exportClubDetail` missing | `str_replace` anchor consumed the function declaration line | Function body was left as loose statements |
 | Tab navigation completely broken | Tab `<div>` elements had no `data-action` attributes and no click listeners after CSP hardening removed inline `onclick` handlers | Added `term-tab`, `sec-tab`, and `pg-tab` delegated listeners in `wireStaticHandlers` |
 | CSP blocked all scripts | Static nonce `clublens2026` replaced with hash-based CSP; hash mismatch after subsequent JS edit | Always recompute hashes after any JS change |
+| Pupils with ' or & in their name showed 0 clubs in Priority Groups / club detail; moved clubs with ' vanished; club names in detail "other clubs" not escaped (fixed v19) | Pupil-map keys built with `esc()` in some places and raw in others; override keys escaped but compared raw | Always use `pkey(p)`; compare `esc(c.name)` to override key names; `esc()` every club name |
 
 ---
 
@@ -289,7 +332,7 @@ These bugs have all been hit. Do not reintroduce them.
 After any edit to a JS block, verify with:
 ```bash
 python3 -c "
-with open('docs/ClubLens_v18.html') as f:
+with open('docs/ClubLens_v19.html') as f:
     c = f.read()
 first_close = c.index('</script>')
 second_start = c.index('<script>', first_close)
@@ -328,7 +371,7 @@ Vercel deploys automatically within ~1 minute.
 
 | File | Description |
 |------|-------------|
-| `docs/ClubLens_v18.html` | The application — current version, self-contained |
+| `docs/ClubLens_v19.html` | The application — current version, self-contained |
 | `docs/index.html` | Landing/download page served by Vercel |
 | `docs/privacy.html` | Data protection information page |
 | `docs/ClubLens-logo.png` | Logo asset |
